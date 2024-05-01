@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {getStorage} from 'firebase/storage'
-import { Image } from "../components/ProductForm";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBP_Ha0A9lTrUl0_efWgjg36lPjkLuFCxc",
@@ -18,8 +18,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
  
 export const storage= getStorage(app)
- 
-export async function uploadImageFirebase(imageObj?:Image,source?:string)
+  
+export async function uploadImageFirebase(imageObj?:any|undefined,source?:string)
 {
  
    const imageRef = ref(storage, `${source}/${imageObj.image.name}`);

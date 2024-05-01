@@ -1,9 +1,10 @@
 import axios from "axios";
-import { Link, useLoaderData, useNavigation } from "react-router-dom";
+import { Link, NavLink, useLoaderData, useNavigation } from "react-router-dom";
 import styled from "styled-components";
 import { getUrl } from "../utils/api";
 import { Product as ProductType } from "../types/Product";
 import Loading from "./Loading";
+ 
 const Container = styled.section`
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -47,7 +48,10 @@ const Product = () => {
           </div>
         </div>
         <div className="text-center">
-          <Link to={"form"} className="py-1.5 px-1.5 rounded-md bg-violet-600 text-white">
+          <Link
+            to={"form"}
+            className="py-1.5 px-1.5 rounded-md bg-violet-600 text-white"
+          >
             + Add Product
           </Link>
         </div>
@@ -61,9 +65,14 @@ const Product = () => {
               <TableHeader>Description</TableHeader>
               <TableHeader>Price</TableHeader>
               <TableHeader>status</TableHeader>
+              <TableHeader>View/edit</TableHeader>
             </tr>
           </thead>
+
           <tbody>
+            { products.length==0 && (
+              <div className="w-full h-full inset -5 text-3xl" style={{position:"absolute",top:"60%",left:"50%"}}>No Products</div>
+            )}
             {products.map((product: ProductType) => {
               return (
                 <>
@@ -89,6 +98,14 @@ const Product = () => {
                     <TableData>{product.description}</TableData>
                     <TableData>{product.price}</TableData>
                     <TableData>{product.status}</TableData>
+                    <TableData>
+                      <NavLink
+                        className="text-sky-400 hover:text-sky-900"
+                        to={`update/${product._id}`}
+                      >
+                        View product
+                      </NavLink>
+                    </TableData>
                   </tr>
                 </>
               );
@@ -104,7 +121,7 @@ export async function loader(){
    console.log(getUrl())
      try{
          const {data}=await axios.get(getUrl()+'products');
-         return data
+         return data.data;
      }
      catch{
          return new Error;

@@ -1,4 +1,4 @@
-import { useNavigate, useNavigation } from "react-router";
+import { useNavigation } from "react-router";
 import styled from "styled-components";
 import Loading from "./Loading";
 

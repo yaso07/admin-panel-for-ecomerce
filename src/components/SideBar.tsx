@@ -1,7 +1,7 @@
 import { faUsers ,faBagShopping,faUser,faStore} from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router";
+ 
 import { NavLink } from "react-router-dom";
 
 
@@ -9,27 +9,34 @@ import { NavLink } from "react-router-dom";
 
 const SideBar = () => {
 
-     const navigate=useNavigate();
+    
     const navs = [
       {
         name: "Customers",
-        icon: (
-          <FontAwesomeIcon
-            icon={faUsers}
-          />
-        ),
-        link:"../"
+        icon: <FontAwesomeIcon icon={faUsers} />,
+        link: "../",
       },
-      { name: "Product", icon: <FontAwesomeIcon icon={faBagShopping}/>,link:"products"},
-      { name: "orders", icon: <FontAwesomeIcon icon={faStore}/>,link:"orders" },
-      { name: "Account", icon: <FontAwesomeIcon icon={faUser} />,link:"account" },
+      {
+        name: "Product",
+        icon: <FontAwesomeIcon icon={faBagShopping} />,
+        link: "products",
+      },
+      {
+        name: "orders",
+        icon: <FontAwesomeIcon icon={faStore} />,
+        link: "orders",
+      },
+      {
+        name: "Account",
+        icon: <FontAwesomeIcon icon={faUser} />,
+        link: "account",
+      },
+      {
+        name: "Chat",
+        icon: <FontAwesomeIcon icon={faUser} />,
+        link: "messages",
+      },
     ];
-
-
-  const navigateTo=(to)=>{
-    console.log(to)
-       navigate('/'+to)
-  }
   const navstyle="m-3 px-2 py-2.5 relative hover:bg-violet-600 active:bg-violet-600 rounded-md flex items-center";
   return (
   

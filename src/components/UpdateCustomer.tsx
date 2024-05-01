@@ -1,11 +1,10 @@
-
-import axios from 'axios';
-import { Form, NavLink, useNavigation } from 'react-router-dom';
-import styled from 'styled-components';
-import { Customer } from '../types/Customer';
-import {getUrl} from '../utils/api.js'
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from "axios";
+import { Form, NavLink, useLoaderData, useNavigation } from "react-router-dom";
+import styled from "styled-components";
+import { Customer } from "../types/Customer";
+import { getUrl } from "../utils/api.js";
+import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Input = styled.input`
   display: block;
   outline-color: rgb(220, 218, 218);
@@ -16,19 +15,21 @@ const Input = styled.input`
   margin-top: 5px;
 `;
 
-const CustomerForm = () => {
-    const navigation=useNavigation()
+const UpdateCustomer = () => {
+    const customer=useLoaderData() as Customer;
+    
+  const navigation = useNavigation();
   return (
     <>
       <main className="w-full py-5 px-7 ">
         <div className="h-1/4 grid grid-cols items-center">
           <div>
-            <NavLink to={'/'}>
+            <NavLink to={"/"}>
               <FontAwesomeIcon icon={faArrowLeftLong} /> Customer
             </NavLink>
           </div>
           <div>
-            <h1 className="text-2xl">Create Customer</h1>
+            <h1 className="text-2xl">Update Customer</h1>
           </div>
         </div>
         <Form
@@ -37,7 +38,8 @@ const CustomerForm = () => {
         >
           <div>
             <label htmlFor="name">Name</label>
-            <Input type="text" name="name" minLength={6} required />
+            <Input type="text" defaultValue={customer.name} name="name" minLength={6} required />
+            
           </div>
           <div>
             <label htmlFor="email">Email</label>
@@ -46,6 +48,7 @@ const CustomerForm = () => {
               pattern="^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$"
               name="email"
               minLength={10}
+              defaultValue={customer.email}
               required
             />
           </div>
@@ -55,6 +58,7 @@ const CustomerForm = () => {
               type="text"
               pattern="^[0-9]{10}$"
               name="mobile"
+              defaultValue={customer.mobile}
               maxLength={10}
               minLength={10}
               min={9999999999}
@@ -69,21 +73,23 @@ const CustomerForm = () => {
           </div>
           <div>
             <label htmlFor="country">Country</label>
-            <Input type="text" defaultValue="India" disabled />
+            <Input type="text" value="India" defaultValue='sdc' disabled />
           </div>
 
           <div>
             <label htmlFor="state">State</label>
-            <Input type="text" minLength={4} name="state"></Input>
+            <Input type="text" minLength={4} defaultValue={customer.billing_address.state} name="state"></Input>
+            
           </div>
           <div>
             <label htmlFor="city">City</label>
-            <Input type="text" minLength={4} name="city"></Input>
+            <Input type="text" minLength={4} defaultValue={customer.billing_address.city} name="city"></Input>
           </div>
           <div>
             <label htmlFor="zipcode">Zipcode</label>
             <Input
               type="text"
+              defaultValue={customer.billing_address.zipcode}
               minLength={6}
               maxLength={6}
               pattern="^[0-9]{6}$"
@@ -91,7 +97,7 @@ const CustomerForm = () => {
           </div>
           <div>
             <label htmlFor="Address">Address</label>
-            <Input type="text" minLength={15} name="address" />
+            <Input type="text" defaultValue={customer.billing_address.address} minLength={15} name="address" />
           </div>
           <div
             className="flex gap-x-5 items-center"
@@ -105,38 +111,42 @@ const CustomerForm = () => {
             </NavLink>
             <button className="text-white bg-violet-600 px-2 py-2  rounded-md flex-end">
               {(navigation.state == "submitting" && "...Submitting") ||
-                "Create Customer"}
+                "Update"}
             </button>
           </div>
         </Form>
       </main>
     </>
   );
+};
+
+export async function action(formdata: FormData,id:any) {
+  const data = JSON.parse(JSON.stringify(Object.fromEntries(formdata)));
+  console.log(data);
+  const customerData: Customer = {
+    name: data.name,
+    email: data.email,
+    mobile: data.mobile,
+    billing_address: {
+      address: data.address,
+      country: data.country,
+      state: data.state,
+      city: data.city,
+      zipcode: data.zipcode,
+    },
+  };
+  const res=await axios.patch(getUrl() + `customers/${id}`, customerData);
+  console.log(res)
+  return new Promise((resolve) => {
+    return setTimeout(() => {
+      return resolve("success");
+    }, 2000);
+  });
 }
 
-export async function action(formdata:FormData){
-    const data = JSON.parse(
-      JSON.stringify(Object.fromEntries(formdata))
-    );
-    console.log(data);
-    const customerData: Customer = {
-      name: data.name,
-      email: data.email,
-      mobile: data.mobile,
-      billing_address: {
-        address: data.address,
-        country: data.country?'India':'',
-        state: data.state,
-        city: data.city,
-        zipcode: data.zipcode,
-      },
-    };
-     await axios.post(getUrl()+'customers',customerData)
-
-     return new Promise((resolve)=>{
-           return setTimeout(()=>{
-                 return resolve('success')
-           },2000)
-     })
+export async function loader(id:any) {
+  const { data } = await axios.get(getUrl() + `customers/${id}`);
+  console.log(data);
+  return await data.data;
 }
-export default CustomerForm
+export default UpdateCustomer;

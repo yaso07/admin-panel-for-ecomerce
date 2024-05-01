@@ -3,7 +3,7 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { Link,useLoaderData, useNavigation } from 'react-router-dom';
+import { Link,NavLink,useLoaderData, useNavigation } from 'react-router-dom';
 import styled from 'styled-components'
 import { Customer as CustomerType } from '../types/Customer';
 import { getUrl } from "../utils/api.js";
@@ -112,6 +112,7 @@ const Customer = () => {
                 <TableHeader>Email</TableHeader>
                 <TableHeader>Location</TableHeader>
                 <TableHeader>Mobile Number</TableHeader>
+                <TableHeader>View/Edit</TableHeader>
               </tr>
             </thead>
             <tbody className="">
@@ -126,6 +127,12 @@ const Customer = () => {
                         {item.billing_address.state},{item.billing_address.city}
                       </TableData>
                       <TableData>{item.mobile}</TableData>
+                      <TableData>
+                        <NavLink
+                          className="text-sky-400 hover:text-sky-900"
+                          to={`customerUpdate/${item._id}`}
+                        >View Customer</NavLink>
+                      </TableData>
                     </tr>
                   </>
                 );

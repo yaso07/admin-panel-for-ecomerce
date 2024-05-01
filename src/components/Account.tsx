@@ -40,9 +40,18 @@ const Account = () => {
         // }
 
         // getEvent();
+        const data:Seller={
+          name: "",
+          email: "",
+          mobile: "",
+          city: "",
+          state: "",
+          image: ""
+        }
+        setAccount(data)
     },[])
     const [image,setImage]=useState<FileList|null>();
-    const {register,reset,handleSubmit}=useForm();
+    const {register,handleSubmit}=useForm();
     console.log(register)
     const uploadImage=()=>{
           const input=document.createElement('input')
@@ -53,7 +62,7 @@ const Account = () => {
                 setImage(input.files)
            })
     }
-    const upload=async(event)=>{
+    const upload=async(event:any)=>{
        
         const imageObj=new Image();
         imageObj.setImage(image)
@@ -106,7 +115,7 @@ const Account = () => {
             <Input
               type="text"
               {...(register("name"),
-              { required: true, minLength: 4, pattern: "^[a-zA-z]$" })}
+              { required: true, minLength: 4, pattern: "^[a-zA-z]+$" })}
               defaultValue={account?.name ?? ""}
               name="name"
               required
@@ -130,7 +139,7 @@ const Account = () => {
               {...(register("mobile"),
               {
                 required: true,
-                pattern: "^[0-9]{10}$",
+                pattern: "^[0-9]{10}+$",
                 minLength: 10,
                 maxLength: 10,
               })}
@@ -142,7 +151,7 @@ const Account = () => {
             <label htmlFor="city">City</label>
             <Input
               type="text"
-              {...(register("city"), { minLength: 4, pattern: "^[a-zA-z]$" })}
+              {...(register("city"), { minLength: 4, pattern: "^[a-zA-z]+$" })}
               defaultValue={account?.city ?? ""}
             />
           </div>
@@ -150,7 +159,7 @@ const Account = () => {
             <label htmlFor="state">State</label>
             <Input
               type="text"
-              {...(register("state"), { minLength: 4, pattern: "^[a-zA-z]$" })}
+              {...(register("state"), { minLength: 4, pattern: "^[a-zA-z]+$" })}
               name="state"
               defaultValue={account?.state ?? ""}
             />

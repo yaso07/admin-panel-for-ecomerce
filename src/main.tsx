@@ -1,12 +1,19 @@
-import React from 'react'
+ 
 import ReactDOM from 'react-dom/client'
-import { routes } from './App.tsx'
+
 import './index.css'
-import { RouterProvider } from 'react-router-dom'
+import { lazy } from 'react';
+import { RouterProvider } from 'react-router';
+
+import { mainRoutes } from './routes';
+import { routes } from './Router';
+
+export const Dashboard =lazy(()=>import('./Admin'))
+console.log(window.location.pathname)
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider router={routes}>
-    </RouterProvider>
-  </React.StrictMode>
+   
+       <RouterProvider router={routes}>
+            
+       </RouterProvider>
 );
