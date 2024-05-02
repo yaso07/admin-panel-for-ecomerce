@@ -31,21 +31,21 @@ const Orders = () => {
 
   const orders = [
     {
-      name:"Product A",
+      name: "Pot",
       quantity: 2,
-      cost: 10.99,
+      cost: "$1099",
       status: "Pending",
     },
     {
-      name: "Product B",
+      name: "Teapot",
       quantity: 1,
-      cost: 25.49,
+      cost: "$259",
       status: "Shipped",
     },
     {
-      name: "Product C",
+      name: "Home Decor",
       quantity: 3,
-      cost: 5.99,
+      cost: "$1232",
       status: "Processing",
     },
   ];

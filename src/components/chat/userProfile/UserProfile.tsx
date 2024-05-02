@@ -7,13 +7,16 @@ export default class UserProfile extends Component {
   };
   render() {
     return (
-      <div className="main__userprofile">
+      <div className="w-3/2 p-4 main__userprofile">
         <div className="profile__card user__profile__image">
           <div className="profile__image">
-            <img src="https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg" />
+            <img
+              alt=""
+              src="https://firebasestorage.googleapis.com/v0/b/traditional-images.appspot.com/o/blank-profile-picture.webp?alt=media&token=f10ddca2-75f5-4915-90ae-de093bb8bfdb"
+            />
           </div>
-          <h4>Fernando Faucho</h4>
-          <p>CEO & Founder at Highly Inc</p>
+          <h4>id:Seller@12</h4>
+          <p></p>
         </div>
         <div className="profile__card">
           <div className="card__header" onClick={this.toggleInfo}>

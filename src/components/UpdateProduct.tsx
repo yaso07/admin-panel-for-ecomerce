@@ -172,7 +172,7 @@ const UpdateProduct = () => {
 
 export async function loader(id:any){
    
-         const {data}=await axios.get(getUrl()+`products/${id}`);
+         const {data}=await axios.get(getUrl()+`product/${id}`);
          console.log(data)
          return await data.data;
     
@@ -186,7 +186,7 @@ export async function action(formdata: FormData,id:any) {
   const res = await uploadImage(imageObj, "images");
   productData.image = res + "";
   axios
-    .patch(`http://localhost:3200/api/products/${id}`, productData)
+    .patch(`http://localhost:3200/api/product/${id}`, productData)
     .then(() => console.log("success"));
 
   return new Promise((resolve)=>{

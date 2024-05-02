@@ -145,7 +145,7 @@ export async function action(formdata: FormData) {
  
     const res = await uploadImage(imageObj, "images");
     productData.image=res+''
-        axios.post("http://localhost:3200/api/products", productData)
+        axios.post("http://localhost:3200/api/product", productData)
           .then(() => console.log("success"));
       
   return new Promise((resolve)=>{

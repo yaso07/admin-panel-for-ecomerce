@@ -120,7 +120,7 @@ const Product = () => {
 export async function loader(){
    console.log(getUrl())
      try{
-         const {data}=await axios.get(getUrl()+'products');
+         const {data}=await axios.get(getUrl()+'product');
          return data.data;
      }
      catch{
