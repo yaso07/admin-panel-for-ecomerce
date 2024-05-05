@@ -7,6 +7,7 @@ import { Product } from "../types/Product";
 import axios from "axios";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSellerId, getUrl } from "../utils/api";
 
 
 const Input = styled.input`
@@ -144,10 +145,11 @@ export async function action(formdata: FormData) {
   );
  
     const res = await uploadImage(imageObj, "images");
-    productData.image=res+''
-        axios.post("http://localhost:3200/api/product", productData)
-          .then(() => console.log("success"));
-      
+    productData.sellerId=await getSellerId();
+    productData.image=res+'';
+      const data=await axios.post(`${getUrl()}product`, productData)
+          console.log(data)
+     await axios.post(`${getUrl()}products`,data.data)
   return new Promise((resolve)=>{
        return setTimeout(()=>{
         resolve('success')

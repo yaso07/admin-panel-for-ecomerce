@@ -5,5 +5,7 @@ export interface Seller{
     city:string,
     state:string,
     image:string,
+    address:string,
+    password:string,
 
 }

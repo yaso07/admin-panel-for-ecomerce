@@ -2,6 +2,7 @@
 
 export interface Product{
     _id:string,
+    sellerId:string,
     product:string,
     stock:string,
     price:string,

@@ -1,6 +1,7 @@
-import { useNavigation } from "react-router";
+import { useLoaderData, useNavigation } from "react-router";
 import styled from "styled-components";
 import Loading from "./Loading";
+import { Order } from "../types/Order";
 
 
 const Container = styled.section`
@@ -29,27 +30,8 @@ const TableData = styled.td`
 `;
 const Orders = () => {
 
-  const orders = [
-    {
-      name: "Pot",
-      quantity: 2,
-      cost: "$1099",
-      status: "Pending",
-    },
-    {
-      name: "Teapot",
-      quantity: 1,
-      cost: "$259",
-      status: "Shipped",
-    },
-    {
-      name: "Home Decor",
-      quantity: 3,
-      cost: "$1232",
-      status: "Processing",
-    },
-  ];
-
+  const orders = useLoaderData() as Order[]
+  console.log(orders)
   const navigation=useNavigation();
 
   return (
@@ -66,8 +48,8 @@ const Orders = () => {
         <table className="w-full border border-seperate border-spacing-4">
           <thead>
             <tr>
-              <TableHeader className="">Name</TableHeader>
-              <TableHeader>Stock</TableHeader>
+              <TableHeader className="">Customer</TableHeader>
+              <TableHeader>Product</TableHeader>
               <TableHeader>Price</TableHeader>
               <TableHeader>status</TableHeader>
             </tr>
@@ -77,9 +59,9 @@ const Orders = () => {
               return (
                 <>
                   <tr className="border border-gray-200">
-                    <TableData>{order.name}</TableData>
-                    <TableData>{order.quantity}</TableData>
-                    <TableData>{order.cost}</TableData>
+                    <TableData>{order.customer}</TableData>
+                    <TableData>{order.product}</TableData>
+                    <TableData>&#x20B9; {order.totalCost.split('$')[1]}</TableData>
                     <TableData>{order.status}</TableData>
                   </tr>
                 </>

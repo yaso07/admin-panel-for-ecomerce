@@ -1,20 +1,20 @@
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, redirect, useLoaderData, useNavigation } from "react-router-dom";
+import { Form, redirect, useNavigation, useSubmit } from "react-router-dom";
 import styled from "styled-components";
-import {Image} from "../components/ProductForm";
-import { uploadImageFirebase as uploadToFirbase } from "../utils/firebase";
+import { Image } from "../../components/ProductForm";
+import { uploadImageFirebase as uploadToFirbase } from "../../utils/firebase";
 import axios from "axios";
-import {getSellerId, getUrl} from '../utils/api'
-import { Seller } from "../types/Seller";
-import Loading from "./Loading";
+import { getUrl } from "../../utils/api";
+import { Seller } from "../../types/Seller";
+import Loading from "../Loading";
 import { toast } from "react-toastify";
 
 const Container = styled.section`
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  width:100%;
-  align-items:center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
   height: 150px;
   box-sizing: border-box;
 `;
@@ -28,47 +28,61 @@ const Input = styled.input`
   margin-top: 5px;
 `;
 
- 
-const Account = () => {
+const AddSellerAccount = () => {
+  const [account, setAccount] = useState<Seller>();
+  console.log(account);
+  const navigation = useNavigation();
+  useEffect(() => {
+    // const getEvent=async()=>{
+    //      const {data}=await axios.get(getUrl()+`seller/${_id}`)
+    //      setAccount(data);
+    // }
 
-     const account=useLoaderData() as Seller
-     console.log(account)
-     const navigation=useNavigation();
-   
-    const [image,setImage]=useState<FileList|null>();
-    const {register,handleSubmit}=useForm();
-    console.log(register)
-    const uploadImage=()=>{
-          const input=document.createElement('input')
-          input.type='file';
-          input.click();
-          input.required=true
-          input.addEventListener('change',()=>{
-                setImage(input.files)
-           })
-    }
-    const upload=async(event:any)=>{
-       
-        const imageObj=new Image();
-        imageObj.setImage(image)
-        let res=account.image;
-        if(imageObj.image)
-        {
-           res=(await uploadToFirbase(imageObj,'images')).toString()
-       }
-        
-      const form={...event,image:res}
-         const sellerId = await getSellerId();
-         console.log(sellerId)
-        const resd=await axios.patch(getUrl()+`seller/${sellerId}`,form)
-        console.log(form)
-        if(resd.status==200)
-          {
-            toast.success('update done')
-           
-          }
-          
-    }
+    // getEvent();
+    const data: Seller = {
+      name: "",
+      email: "",
+      mobile: "",
+      city: "",
+      state: "",
+      image: "",
+    };
+    setAccount(data);
+  }, []);
+  const [image, setImage] = useState<FileList | null>();
+  const { register, handleSubmit } = useForm();
+  const submit=useSubmit();
+  console.log(register);
+  const uploadImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.click();
+    input.required = true;
+    input.addEventListener("change", () => {
+      console.log(input.files[0])
+      setImage(input.files[0]);
+    });
+  };
+  const upload = async (event: any) => {
+    const imageObj = new Image();
+    imageObj.setImage(image);
+    
+    if(!imageObj.image)
+      {
+          toast.warning('upload image')
+      }
+      console.log(imageObj.getImage())
+    const res = await uploadToFirbase(imageObj, "images");
+  
+    const form = { ...event, image: res,password:event.name+'1234' };
+    const data = await axios.post(getUrl() + "seller", form);
+    if(data.status==200)
+      {
+        toast.success('created')
+        submit(null, { method: "post" });
+      }
+      
+  };
   return (
     <>
       <main className="w-full">
@@ -76,7 +90,7 @@ const Account = () => {
         <Container>
           <div>
             <div>
-              <p className="text-3xl px-6">Account</p>
+              <p className="text-3xl px-6">Add Seller</p>
             </div>
           </div>
         </Container>
@@ -85,7 +99,7 @@ const Account = () => {
           onSubmit={handleSubmit(upload)}
           className="grid grid-cols-3 gap-y-5 gap-x-7 w-11/12 px-5 py-10 items-center"
         >
-          <div className="border border-gray-200 h-full rounded-lg row-span-4">
+          <div className="border border-gray-200 h-full rounded-lg row-span-3">
             <div className="flex flex-col gap-y-2 px-5 py-7 items-center">
               <img
                 className="w-20 h-20 rounded-full object-cover"
@@ -116,8 +130,6 @@ const Account = () => {
               required
               minLength={4}
               pattern="^[a-zA-z]+$"
-              defaultValue={account?.name ?? ""}
-              name="name"
             />
           </div>
           <div>
@@ -125,23 +137,22 @@ const Account = () => {
             <Input
               type="email"
               {...register("email")}
-              pattern="^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$"
-              defaultValue={account?.email ?? ""}
+              
+                pattern="^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$"
+              
             />
           </div>
           <div>
             <label htmlFor="mobile">Mobile number </label>
             <Input
               type="text"
-              {...(register("mobile"),
-              {
-                required: true,
-                pattern: "^[0-9]{10}+$",
-                minLength: 10,
-                maxLength: 10,
-              })}
-              defaultValue={account?.mobile ?? ""}
-              name="mobile"
+              {...register("mobile")}
+              
+                required
+                pattern= "^[0-9]{10}+$"
+                minLength= {10}
+                maxLength={10}
+            
             />
           </div>
           <div>
@@ -149,9 +160,9 @@ const Account = () => {
             <Input
               type="text"
               {...register("city")}
+              required
               minLength={4}
               pattern="^[a-zA-z]+$"
-              defaultValue={account?.city ?? ""}
             />
           </div>
           <div>
@@ -159,34 +170,15 @@ const Account = () => {
             <Input
               type="text"
               {...register("state")}
+              required
               minLength={4}
               pattern="^[a-zA-z]+$"
-              name="state"
-              defaultValue={account?.state ?? ""}
             />
           </div>
-
           <div>
             <label htmlFor="Address">Address</label>
-            <Input
-              type="text"
-              minLength={15}
-              {...register("address")}
-              defaultValue={account?.address ?? ""}
-            />
+            <Input type="text" {...register("address")} minLength={15} />
           </div>
-          {account.password.includes(`${account.name}1234`) && (
-            <div className="col-span-1 ">
-              <label htmlFor="Address">Reset your password</label>
-              <Input
-                type="text"
-                minLength={6}
-                {...register("password")}
-                defaultValue={account?.password ?? ""}
-                name="password"
-              />
-            </div>
-          )}
 
           <div
             className="flex gap-x-5 w-full mb-1 "
@@ -199,7 +191,7 @@ const Account = () => {
               Cancel
             </button>
             <button className="text-white w-full bg-violet-600 px-2 py-2  rounded-md flex-end">
-              {(navigation.state == "loading" && "...sumbitting") || "Save"}
+             {navigation.state=='loading' && 'submitting' || 'create'}
             </button>
           </div>
         </Form>
@@ -208,12 +200,4 @@ const Account = () => {
   );
 };
 
-export async function loader(){
-
-      console.log(getSellerId())
-      const sellerId=await getSellerId()
-       const data=await axios.get(getUrl()+`seller/${sellerId}`)
-       console.log(data)
-       return data.data;
-}
-export default Account;
+export default AddSellerAccount;

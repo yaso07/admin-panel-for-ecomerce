@@ -36,6 +36,11 @@ const SideBar = () => {
         icon: <FontAwesomeIcon icon={faUser} />,
         link: "messages",
       },
+      {
+        name: "Logout",
+        icon: <FontAwesomeIcon icon={faUser} />,
+        link: "logout"
+      },
     ];
   const navstyle="m-3 px-2 py-2.5 relative hover:bg-violet-600 active:bg-violet-600 rounded-md flex items-center";
   return (

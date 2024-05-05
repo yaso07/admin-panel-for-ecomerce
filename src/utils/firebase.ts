@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
  
 export const storage= getStorage(app)
-  
+ import { toast } from "react-toastify"; 
 export async function uploadImageFirebase(imageObj?:any|undefined,source?:string)
 {
  
@@ -28,6 +28,8 @@ export async function uploadImageFirebase(imageObj?:any|undefined,source?:string
        .then((res) => {
           return res;
        })
-       .catch(() => console.log("error"));
+       .catch(() => 
+        toast.error("upload image")
+      );
    });
 }

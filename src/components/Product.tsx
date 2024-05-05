@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link, NavLink, useLoaderData, useNavigation } from "react-router-dom";
 import styled from "styled-components";
-import { getUrl } from "../utils/api";
+import { getSellerId, getUrl } from "../utils/api";
 import { Product as ProductType } from "../types/Product";
 import Loading from "./Loading";
  
@@ -118,9 +118,10 @@ const Product = () => {
 };
 
 export async function loader(){
-   console.log(getUrl())
+   console.log(await getSellerId())
      try{
-         const {data}=await axios.get(getUrl()+'product');
+         const {data}=await axios.get(getUrl()+'product/bySeller/'+await getSellerId());
+         console.log(data)
          return data.data;
      }
      catch{
